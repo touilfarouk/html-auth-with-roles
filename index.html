@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>Login</title>
+</head>
+<body>
+    <h2>Login</h2>
+    <b>administrateur  username (<span style="color:red"> user1</span>) password (<span style="color:red"> password1</span>)</b>
+    <br>
+    <b>utilisateur  username (<span style="color:red"> user2</span>) password (<span style="color:red"> password2</span>)</b>
+   
+    <form id="loginForm">
+        <div>
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" required>
+        </div>
+        <div>
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required>
+        </div>
+        <button type="submit">Login</button>
+    </form>
+    <div id="errorMessage" style="color: red;"></div>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            var formData = new FormData(this);
+            fetch('login.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    window.location.href = 'authenticated.html';
+                } else {
+                    document.getElementById('errorMessage').textContent = 'Incorrect username or password.';
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        });
+    </script>
+</body>
+</html>

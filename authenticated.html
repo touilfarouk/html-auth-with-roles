@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Authenticated Page</title>
+</head>
+<body>
+    <h2>Welcome, <span id="username"></span>!</h2>
+    <p>This content is only visible to authenticated users.</p>
+    <div id="authenticatedContent"></div>
+    
+    <!-- Logout button -->
+    <button id="logoutButton">Logout</button>
+
+    <script>
+        // Check if the user is authenticated
+        fetch('check_authentication.php')
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                document.getElementById('username').textContent = data.username;
+                // Add authenticated content here
+                document.getElementById('authenticatedContent').innerHTML = '<p>This content is only visible to authenticated users.</p>';
+            } else {
+                window.location.href = 'index.html'; // Redirect to login page if not authenticated
+            }
+        })
+        .catch(error => console.error('Error:', error));
+
+        // Logout functionality
+        document.getElementById('logoutButton').addEventListener('click', function() {
+            fetch('logout.php')
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    window.location.href = 'index.html'; // Redirect to login page after logout
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        });
+    </script>
+</body>
+</html>
